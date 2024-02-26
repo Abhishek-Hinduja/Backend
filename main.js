@@ -3,21 +3,13 @@ const fs = require("fs")
 
 const app = express()
 
-const port = 4000
+const port = 3000
 
 app.use(express.json())
 
-app.get("/", (req,res)=>{
-    fs.readFile("./index.html", "utf-8", (err,data)=>{
-        res.end(data)
-    })
-})
+app.use(logger)
 
-app.get("/index.js", (req,res)=>{
-    fs.readFile("./index.js", "utf-8", (err,data)=>{
-        res.end(data)
-    })
-})
+app.use(express.static("todo"))
 
 app.post("/save", (req,res)=>{
     fs.readFile("./db.txt", "utf-8", (err,data)=>{
@@ -38,6 +30,13 @@ app.get("/gettodo", (req,res)=>{
         res.end(data)
     })
 })
+
+function logger(req,res,next){
+    console.log("req received at ", Date.now())
+    console.log("req recieved at ", req.url)
+    console.log("req recieved at ", req.method)
+    next()
+}
 
 
 app.listen(port,()=>{
